@@ -4,7 +4,7 @@ function Footer() {
   return (
     <footer>
         <hr />
-        <p>Desarrolado por: Carlos Chizzini Melo</p>
+        <p>Desarrollado por: Carlos Chizzini Melo</p>
     </footer>
   )
 }

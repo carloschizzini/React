@@ -4,19 +4,84 @@ import Inicio from './pages/inicio'
 import Navbar from './pages/Navbar'
 import Productos from './pages/productos'
 import ProductoDetalle from './pages/productoDetalle'
+import Pagar from './pages/pagar'
+import RutaProtegida from './pages/rutaProtegida'
+import IniciarSesion from './pages/iniciarSesion'
 import Footer from './pages/Footer'
 import { Routes, Route } from 'react-router-dom'
+import { AuthProvider } from "./context/AuthContext";
+import { CartProvider } from "./context/CartContext";
+import { ProductsProvider } from "./context/ProductsContext";
+import Dashboard from "./pages/Dashboard";
+import FormularioProducto from './components/FormularioProducto';
+import EliminarProducto from './components/EliminarProducto';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; 
 
 function App() {
   return (
     <div>
+       <AuthProvider>
+        <CartProvider>
+          <ProductsProvider>
       <Navbar />
       <Routes>
+         {/* RUTAS PÚBLICAS */}
         <Route path='/' element={<Inicio />} />
         <Route path='/productos' element={<Productos />} />
         <Route path='/productos/:id' element={<ProductoDetalle />} />
-      </Routes>
-      <Footer />
+        <Route path='/productos/:categoria/:id' element={<ProductoDetalle />} />
+        <Route path="/iniciar-sesion" element={<IniciarSesion />} />
+
+
+               <Route path="/iniciar-sesion" element={<IniciarSesion />} />
+             
+              {/* RUTA PROTEGIDA - para Usuarios */}
+              <Route path="/pagar" element={<RutaProtegida><Pagar /></RutaProtegida>}/>
+             
+              {/* RUTA PROTEGIDA - para Admins */}
+              <Route path="/dashboard" element={<RutaProtegida soloAdmin={true}><Dashboard /></RutaProtegida>}/>
+             
+              {/* Ruta para formulario Agrega/Edita*/}
+              <Route
+                path="/formulario-producto"
+                element={
+                  <RutaProtegida>
+                    <FormularioProducto />
+                  </RutaProtegida>
+                }
+              />
+             
+              {/* Ruta para ELIMINAR producto */}
+              <Route
+                path="/eliminar-producto"
+                element={
+                  <RutaProtegida>
+                    <EliminarProducto />
+                  </RutaProtegida>
+                }
+              />
+             
+              {/* Redirección por defecto */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+            <Footer />
+            <ToastContainer
+              position="top-center"
+              autoClose={3000}
+              hideProgressBar={false}
+              closeOnClick
+              draggable
+              pauseOnHover
+            />
+          </ProductsProvider>
+        </CartProvider>
+      </AuthProvider>
+
     </div>
   )
 }
